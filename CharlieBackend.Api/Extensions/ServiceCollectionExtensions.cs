@@ -115,9 +115,15 @@ namespace CharlieBackend.Api.Extensions
                         sql => sql.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
                     ));
             }
-                #region Services
 
-                services.AddTransient<IIdentityService, IdentityService>();
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.SignIn.RequireConfirmedAccount = true;
+                options.Password.RequireNonAlphanumeric = false;
+            }).AddEntityFrameworkStores<IdentityContext>().AddDefaultUI().AddDefaultTokenProviders();
+            #region Services
+
+            services.AddTransient<IIdentityService, IdentityService>();
 
             #endregion Services
 
