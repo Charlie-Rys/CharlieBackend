@@ -10,8 +10,6 @@ namespace CharlieBackend.Application.Interfaces.Repositories
     {
         IQueryable<T> Entities { get; }
 
-
-
         Task<T> GetByIdAsync(int id);
 
         Task<T> GetSingleAllIncludingAsync(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includeProperties);
