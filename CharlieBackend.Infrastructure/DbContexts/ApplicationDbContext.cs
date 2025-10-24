@@ -5,7 +5,6 @@ using CharlieBackend.Application.Interfaces.Shared;
 using CharlieBackend.Domain.Entities.Catalog;
 using CharlieBackend.Domain.Entities.Library;
 using Microsoft.EntityFrameworkCore;
-using CharlieBackend.Domain.Entities.Library; 
 using System.Data;
 using System.Linq;
 using System.Threading;
@@ -30,14 +29,6 @@ namespace CharlieBackend.Infrastructure.DbContexts
 
        
         public DbSet<Product> Products { get; set; }
-
-      
-        public DbSet<Author> Authors { get; set; }
-        public DbSet<AuthorDetail> AuthorDetails { get; set; }
-        public DbSet<Book> Books { get; set; }
-        public DbSet<BookDetail> BookDetails { get; set; }
-
-       
         public IDbConnection Connection => Database.GetDbConnection();
         public bool HasChanges => ChangeTracker.HasChanges();
 
@@ -69,7 +60,7 @@ namespace CharlieBackend.Infrastructure.DbContexts
       
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            // 🔹 Standardize decimal precision
+           
             foreach (var property in builder.Model.GetEntityTypes()
                 .SelectMany(t => t.GetProperties())
                 .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
