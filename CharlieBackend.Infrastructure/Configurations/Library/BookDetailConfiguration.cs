@@ -19,9 +19,9 @@ using global::CharlieBackend.Infrastructure.Seeds.Library;
         {
             public void Configure(EntityTypeBuilder<BookDetail> builder)
             {
-                TableShortName = "BookDetail";
+                TableShortName = "BookDetails";
                 TableName = $"{TableNamePrefix}_{TableShortName}";
-
+            
                 builder.ToTable(TableName);
 
                 builder.HasKey(bd => bd.Id)
@@ -41,7 +41,8 @@ using global::CharlieBackend.Infrastructure.Seeds.Library;
                     .HasForeignKey(bd => bd.BookId)
                     .HasConstraintName($"{ConstraintPrefix}_{TableShortName}_Book");
 
-                builder.HasData(BookDetailSeeds.BookDetailsList);
+            builder.HasData(BookDetailSeeds.BookDetailsList);
+
             }
         }
 

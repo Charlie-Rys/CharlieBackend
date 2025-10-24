@@ -14,7 +14,7 @@ namespace CharlieBackend.Infrastructure.Configurations.Library
     {
         public void Configure(EntityTypeBuilder<Author> builder)
         {
-            TableShortName = "Author";
+            TableShortName = "Authors";
             TableName = $"{TableNamePrefix}_{TableShortName}";
 
             builder.ToTable(TableName);

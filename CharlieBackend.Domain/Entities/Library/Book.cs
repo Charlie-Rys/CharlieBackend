@@ -16,6 +16,6 @@ namespace CharlieBackend.Domain.Entities.Library
         public virtual Author Author { get; set; }
 
         
-        public virtual ICollection<BookDetail> BookDetails { get; set; } = new List<BookDetail>();
+        public virtual ICollection<BookDetail> BookDetails { get; set; }
     }
 }
