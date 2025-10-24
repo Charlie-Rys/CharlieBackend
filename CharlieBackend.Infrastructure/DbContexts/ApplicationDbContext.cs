@@ -1,9 +1,11 @@
 ﻿using AspNetCoreHero.Abstractions.Domain;
+using AspNetCoreHero.EntityFrameworkCore.AuditTrail;
 using CharlieBackend.Application.Interfaces.Contexts;
 using CharlieBackend.Application.Interfaces.Shared;
 using CharlieBackend.Domain.Entities.Catalog;
-using AspNetCoreHero.EntityFrameworkCore.AuditTrail;
+using CharlieBackend.Domain.Entities.Library;
 using Microsoft.EntityFrameworkCore;
+using CharlieBackend.Domain.Entities.Library; 
 using System.Data;
 using System.Linq;
 using System.Threading;
@@ -16,18 +18,30 @@ namespace CharlieBackend.Infrastructure.DbContexts
         private readonly IDateTimeService _dateTime;
         private readonly IAuthenticatedUserService _authenticatedUser;
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, IDateTimeService dateTime, IAuthenticatedUserService authenticatedUser) : base(options)
+        public ApplicationDbContext(
+            DbContextOptions<ApplicationDbContext> options,
+            IDateTimeService dateTime,
+            IAuthenticatedUserService authenticatedUser)
+            : base(options)
         {
             _dateTime = dateTime;
             _authenticatedUser = authenticatedUser;
         }
 
+       
         public DbSet<Product> Products { get; set; }
 
-        public IDbConnection Connection => Database.GetDbConnection();
+      
+        public DbSet<Author> Authors { get; set; }
+        public DbSet<AuthorDetail> AuthorDetails { get; set; }
+        public DbSet<Book> Books { get; set; }
+        public DbSet<BookDetail> BookDetails { get; set; }
 
+       
+        public IDbConnection Connection => Database.GetDbConnection();
         public bool HasChanges => ChangeTracker.HasChanges();
 
+       
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (var entry in ChangeTracker.Entries<AuditableEntity>().ToList())
@@ -45,27 +59,25 @@ namespace CharlieBackend.Infrastructure.DbContexts
                         break;
                 }
             }
+
             if (_authenticatedUser.UserId == null)
-            {
                 return await base.SaveChangesAsync(cancellationToken);
-            }
             else
-            {
                 return await base.SaveChangesAsync(_authenticatedUser.UserId);
-            }
         }
 
+      
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            // 🔹 Standardize decimal precision
             foreach (var property in builder.Model.GetEntityTypes()
-            .SelectMany(t => t.GetProperties())
-            .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
+                .SelectMany(t => t.GetProperties())
+                .Where(p => p.ClrType == typeof(decimal) || p.ClrType == typeof(decimal?)))
             {
                 property.SetColumnType("decimal(18,2)");
             }
 
-            System.Reflection.Assembly assemblyWithConfigurations = GetType().Assembly; //get whatever assembly you want
-            builder.ApplyConfigurationsFromAssembly(assemblyWithConfigurations);
+            builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
             base.OnModelCreating(builder);
         }
