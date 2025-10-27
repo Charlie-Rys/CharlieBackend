@@ -8,6 +8,8 @@ using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using CharlieBackend.Application.Interfaces.Repositories.Library;
+using CharlieBackend.Infrastructure.Repositories.Library;
 
 namespace CharlieBackend.Infrastructure.Extensions
 {
@@ -32,6 +34,16 @@ namespace CharlieBackend.Infrastructure.Extensions
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             #endregion Repositories
+
+
+            #region Library
+
+            services.AddTransient<IAuthorRepository, AuthorRepository>();
+            services.AddTransient<IAuthorDetailRepository, AuthorDetailRepository>();
+            services.AddTransient<IBookRepository, BookRepository>();
+            services.AddTransient<IBookDetailRepository, BookDetailRepository>();
+
+            #endregion Library
         }
     }
 }
