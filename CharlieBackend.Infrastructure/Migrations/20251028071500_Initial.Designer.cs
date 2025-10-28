@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CharlieBackend.Infrastructure.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20251023083545_Initial")]
+    [Migration("20251028071500_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

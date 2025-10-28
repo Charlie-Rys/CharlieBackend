@@ -28,4 +28,7 @@
     <ProjectReference Include="..\CharlieBackend.Application\CharlieBackend.Application.csproj" />
     <ProjectReference Include="..\CharlieBackend.Domain\CharlieBackend.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Migrations\ApplicationDb\" />
+  </ItemGroup>
 </Project>

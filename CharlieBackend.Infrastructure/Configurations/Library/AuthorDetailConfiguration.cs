@@ -14,35 +14,28 @@ namespace CharlieBackend.Infrastructure.Configurations.Library
     {
         public void Configure(EntityTypeBuilder<AuthorDetail> builder)
         {
-            TableShortName = "AuthorDetail";
-            TableName = $"{TableNamePrefix}_{TableShortName}";
-
+            TableName = "authorDetail";
             builder.ToTable(TableName);
 
-            builder.HasKey(ad => ad.Id)
-                   .HasName($"{UniquePrefix}_{TableShortName}_Id");
+            builder.Property(p => p.Id)
+               .IsRequired();
 
-            builder.Property(ad => ad.Biography)
-                .HasColumnType(DefaultTextLong);
+            builder.Property(t => t.Biography)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-            builder.Property(ad => ad.Website)
-                .HasMaxLength((int)EnumColumnLength.VARCHAR200);
+            builder.Property(t => t.Website)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-            builder.Property(ad => ad.SocialMediaHandle)
-                .HasMaxLength((int)EnumColumnLength.VARCHAR200);
+            builder.Property(t => t.SocialMediaHandle)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-            builder.Property(ad => ad.Awards)
-                .HasMaxLength((int)EnumColumnLength.VARCHAR200);
+            builder.Property(t => t.Awards)
+               .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+               .IsRequired(true);
 
-            builder.HasOne(ad => ad.Author)
-                .WithMany(a => a.AuthorDetails)
-                .HasForeignKey(ad => ad.AuthorId)
-                .HasConstraintName($"{ConstraintPrefix}_{TableShortName}_Author");
-
-
-
-
-            builder.HasData(AuthorDetailSeeds.AuthorDetailList);
         }
     }
 }
