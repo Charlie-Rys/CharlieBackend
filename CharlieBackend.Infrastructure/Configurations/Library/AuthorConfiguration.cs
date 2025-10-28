@@ -14,40 +14,24 @@ namespace CharlieBackend.Infrastructure.Configurations.Library
     {
         public void Configure(EntityTypeBuilder<Author> builder)
         {
-            TableShortName = "Author";
-            TableName = $"{TableNamePrefix}_{TableShortName}";
-
+            TableName = "author";
             builder.ToTable(TableName);
 
-            builder.HasKey(a => a.Id)
-                   .HasName($"{UniquePrefix}_{TableShortName}_Id");
+            builder.Property(p => p.Id)
+               .IsRequired();
 
-            builder.Property(a => a.FirstName)
-                .IsRequired()
-                .HasMaxLength((int)EnumColumnLength.VARCHAR200);
+            builder.Property(t => t.FirstName)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-            builder.Property(a => a.LastName)
-                .IsRequired()
-                .HasMaxLength((int)EnumColumnLength.VARCHAR200);
+            builder.Property(t => t.LastName)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-            builder.Property(a => a.BirthDate)
-                .HasColumnType(DefaultDateTime)
-                .HasDefaultValueSql(DefaultDateNow);
+            builder.Property(t => t.BirthDate)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-            // Relationships
-            builder.HasMany(a => a.AuthorDetails)
-                   .WithOne(d => d.Author)
-                   .HasForeignKey(d => d.AuthorId)
-                   .HasConstraintName($"{ConstraintPrefix}_{TableShortName}_AuthorDetail");
-
-            builder.HasMany(a => a.Books)
-                   .WithOne(b => b.Author)
-                   .HasForeignKey(b => b.AuthorId)
-                   .HasConstraintName($"{ConstraintPrefix}_{TableShortName}_Book");
-
-
-
-            builder.HasData(AuthorSeeds.AuthorList);
         }
     }
 }

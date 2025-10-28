@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System;
+using AspNetCoreHero.Abstractions.Domain;
 
 namespace CharlieBackend.Domain.Entities.Library
 {
-    public class Book
+    public class Book : AuditableEntity
     {
-        public int Id { get; set; }
+       
         public string Title { get; set; }
         public int AuthorId { get; set; }
 
@@ -16,6 +17,6 @@ namespace CharlieBackend.Domain.Entities.Library
         public virtual Author Author { get; set; }
 
         
-        public virtual ICollection<BookDetail> BookDetails { get; set; } = new List<BookDetail>();
+          public ICollection<BookDetail> BookDetail { get; set; }
     }
 }

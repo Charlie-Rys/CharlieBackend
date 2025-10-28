@@ -25,7 +25,7 @@ namespace CharlieBackend.Application.Features.Library.Books.Commands.Create
 
         public string ISBN { get; set; }
         public DateTime PublishDate { get; set; }
-        public ICollection<CreateBookDetailCommand> Book { get; set; }
+        public ICollection<CreateBookDetailCommand> BookDetail { get; set; }
     }
     public class CreateBookCommandHandler : IRequestHandler<CreateBookCommand, Result<int>>
     {

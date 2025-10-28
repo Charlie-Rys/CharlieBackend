@@ -2,39 +2,37 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using CharlieBackend.Infrastructure.Seeds.Library;
+using System;
 
 namespace CharlieBackend.Infrastructure.Configurations.Library
 {
-    public class BookDetailConfiguration : BaseModelConfig, IEntityTypeConfiguration<BookDetail>
+    public class BookConfiguration : BaseModelConfig, IEntityTypeConfiguration<Book>
     {
-        public BookDetailConfiguration()
+        public void Configure(EntityTypeBuilder<Book> builder)
         {
-        }
-        public void Configure(EntityTypeBuilder<BookDetail> builder)
-        {
-            TableShortName = "BookDetail";
-            TableName = $"{TableNamePrefix}_{TableShortName}";
-
+            TableName = "Book";
             builder.ToTable(TableName);
 
-            builder.HasKey(bd => bd.Id)
-                   .HasName($"{UniquePrefix}_{TableShortName}_Id");
+            builder.Property(p => p.Id)
+               .IsRequired();
+          
 
-            builder.Property(bd => bd.Genre)
-                   .HasMaxLength((int)EnumColumnLength.VARCHAR200);
+            builder.Property(t => t.Title)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-            builder.Property(bd => bd.Language)
-                   .HasMaxLength((int)EnumColumnLength.VARCHARDEFAULT);
+            builder.Property(t => t.AuthorId)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-            builder.Property(bd => bd.Publisher)
-                   .HasMaxLength((int)EnumColumnLength.VARCHAR200);
+            builder.Property(t => t.ISBN)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-            builder.HasOne(bd => bd.Book)
-                   .WithMany(b => b.BookDetails) 
-                   .HasForeignKey(bd => bd.BookId)
-                   .HasConstraintName($"{ConstraintPrefix}_{TableShortName}_Book");
+            builder.Property(p => p.PublishDate)
+                .HasColumnType(DefaultDateTime)
+                .IsRequired(true);
 
-            builder.HasData(BookDetailSeeds.BookDetailsList); 
         }
     }
 }

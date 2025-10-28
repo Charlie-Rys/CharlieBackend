@@ -15,36 +15,39 @@ using global::CharlieBackend.Infrastructure.Seeds.Library;
 
     namespace CharlieBackend.Infrastructure.Configurations.Library
     {
-        public class BookDetailsConfiguration : BaseModelConfig, IEntityTypeConfiguration<BookDetail>
+    public class BookDetailConfiguration : BaseModelConfig, IEntityTypeConfiguration<BookDetail>
+    {
+        public void Configure(EntityTypeBuilder<BookDetail> builder)
         {
-            public void Configure(EntityTypeBuilder<BookDetail> builder)
-            {
-                TableShortName = "BookDetail";
-                TableName = $"{TableNamePrefix}_{TableShortName}";
+            TableName = "bookDetail";
+            builder.ToTable(TableName);
 
-                builder.ToTable(TableName);
+            builder.Property(p => p.Id)
+               .IsRequired();
 
-                builder.HasKey(bd => bd.Id)
-                       .HasName($"{UniquePrefix}_{TableShortName}_Id");
+            builder.Property(t => t.BookId)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHARDEFAULT)
+                .IsRequired(true);
 
-                builder.Property(bd => bd.Genre)
-                    .HasMaxLength((int)EnumColumnLength.VARCHAR200);
+            builder.Property(t => t.Genre)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-                builder.Property(bd => bd.Language)
-                    .HasMaxLength((int)EnumColumnLength.VARCHARDEFAULT);
+            builder.Property(t => t.PageCount)
+                .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+                .IsRequired(true);
 
-                builder.Property(bd => bd.Publisher)
-                    .HasMaxLength((int)EnumColumnLength.VARCHAR200);
+            builder.Property(t => t.Publisher)
+               .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+               .IsRequired(true);
 
-                builder.HasOne(bd => bd.Book)
-                    .WithMany(b => b.BookDetails)
-                    .HasForeignKey(bd => bd.BookId)
-                    .HasConstraintName($"{ConstraintPrefix}_{TableShortName}_Book");
+            builder.Property(t => t.Language)
+              .HasMaxLength((Int32)EnumColumnLength.VARCHAR200)
+              .IsRequired(true);
 
-                builder.HasData(BookDetailSeeds.BookDetailsList);
-            }
         }
-
     }
+
+}
 
 
