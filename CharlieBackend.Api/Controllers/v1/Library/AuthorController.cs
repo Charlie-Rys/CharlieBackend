@@ -2,6 +2,7 @@
 using CharlieBackend.Application.Features.Library.Authors.Commands.Create;
 using CharlieBackend.Application.Features.Library.Authors.Commands.Delete;
 using CharlieBackend.Application.Features.Library.Authors.Commands.Update;
+using CharlieBackend.Application.Features.Library.Authors.Commands.Update.UpdateAuthorAge;
 using CharlieBackend.Application.Features.Library.Authors.Queries.GetAllPaged;
 using CharlieBackend.Application.Features.Library.Authors.Queries.GetById;
 using Microsoft.AspNetCore.Mvc;
@@ -57,6 +58,23 @@ namespace CharlieBackend.Api.Controllers.v1.Library
             }
             return Ok(await _mediator.Send(command));
         }
+
+
+
+        [HttpPatch("{id}/birthdate")]
+        public async Task<IActionResult> UpdateBirthDate(int id, [FromBody] UpdateAuthorAgeCommand command)
+        {
+            if (id != command.Id)
+                return BadRequest("ID mismatch");
+
+            var result = await _mediator.Send(command);
+            if (result.Succeeded)
+                return Ok(result);
+
+            return BadRequest(result);
+        }
+
+
 
         // DELETE api/<controller>/5
         [HttpDelete("{id}")]

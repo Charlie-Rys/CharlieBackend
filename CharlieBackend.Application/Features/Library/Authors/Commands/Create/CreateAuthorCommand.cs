@@ -21,20 +21,20 @@ namespace CharlieBackend.Application.Features.Library.Authors.Commands.Create
         public string LastName { get; set; }
         public DateTime BirthDate { get; set; }
 
-        public ICollection<CreateAuthorDetailCommand> AuthorDetail { get; set; }
+        public ICollection<CreateAuthorDetailCommand> AuthorDetails { get; set; }
     }
 
 
     public class CreateAuthorCommandHandler : IRequestHandler<CreateAuthorCommand, Result<int>>
     {
-        private readonly IAuthorRepository _author;
+        private readonly IAuthorRepository _authorRepository;
         private readonly IMapper _mapper;
 
         private IUnitOfWork _unitOfWork { get; set; }
 
         public CreateAuthorCommandHandler(IAuthorRepository author, IUnitOfWork unitOfWork, IMapper mapper)
         {
-            _author = author;
+            _authorRepository = author;
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
@@ -42,7 +42,7 @@ namespace CharlieBackend.Application.Features.Library.Authors.Commands.Create
         public async Task<Result<int>> Handle(CreateAuthorCommand request, CancellationToken cancellationToken)
         {
             var author = _mapper.Map<Author>(request);
-            await _author.InsertAsync(author);
+            await _authorRepository.InsertAsync(author);
             await _unitOfWork.Commit(cancellationToken);
             return Result<int>.Success(author.Id);
         }
